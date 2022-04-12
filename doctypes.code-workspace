@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "name": "Src",
+            "path": "./src"
+        },
+        {
+            "name": "Dist",
+            "path": "./dist"
+        },
+        {
+            "name": "DocTypes",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "typescript.tsc.autoDetect": "off"
+    }
+}
