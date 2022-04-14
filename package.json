@@ -3,21 +3,46 @@
     "displayName": "DocTypes",
     "description": "JSDoc generator for TypeScript using AI.",
     "version": "1.0.0",
+    "publisher": "dalirnet",
     "engines": {
         "vscode": "^1.66.0"
     },
     "categories": [
-        "Other"
+        "Programming Languages"
+    ],
+    "keywords": [
+        "typescript",
+        "documentation",
+        "jsdoc"
     ],
     "activationEvents": [
+        "onStartupFinished",
         "onCommand:doctypes.generate"
     ],
     "main": "dist/extension.js",
     "contributes": {
         "commands": [
             {
+                "when": "editorLangId == typescript",
                 "command": "doctypes.generate",
                 "title": "DocTypes generate"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "editorLangId == typescript",
+                    "command": "doctypes.generate",
+                    "group": "1_modification"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "when": "editorLangId == typescript",
+                "command": "doctypes.generate",
+                "key": "ctrl+alt+d",
+                "mac": "cmd+alt+d"
             }
         ]
     },
@@ -28,7 +53,10 @@
         "lint": "eslint src --ext ts",
         "test": "node ./dist/test/index.js"
     },
-    "repository": "https://github.com/dalirnet/doctypes.git",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dalirnet/doctypes.git"
+    },
     "author": "Amir Reza Dalir <dalirnet@gmail.com>",
     "license": "MIT",
     "devDependencies": {
@@ -45,5 +73,7 @@
         "mocha": "^9.2.2",
         "typescript": "^4.5.5"
     },
-    "dependencies": {}
+    "dependencies": {
+        "axios": "^0.26.1"
+    }
 }
