@@ -1,63 +1,69 @@
 import * as vscode from "vscode";
-import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { resolve } from "path";
+import axios, { AxiosInstance } from "axios";
+import { runtimeAwait } from "./utils";
 
 export class Descriptor {
-    public retry = 0;
-    public maxRetry = 10;
-    public retryDelay = 500;
-
     private readonly mintlify: AxiosInstance;
-    private readonly context: string;
-    private readonly code: string;
+    public retry = {
+        max: 10,
+        delay: 500,
+    };
 
-    constructor(context: string, code: string) {
-        this.context = context;
-        this.code = code;
+    constructor(private readonly context: string, private readonly code: string, private readonly languageId: string) {
         this.mintlify = axios.create({
             baseURL: "https://api.mintlify.com/docs/",
             headers: { referer: "https://www.docstring.ai/" },
         });
     }
 
-    async write(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.mintlify
-                .post("write/v3", {
-                    userId: vscode.env.machineId,
-                    code: this.code,
-                    context: this.context,
-                    languageId: "typescript",
-                    docStyle: "JSDoc",
-                    source: "vscode",
-                    commented: false,
-                })
-                .then(({ data }) => {
-                    this.worker(data.id, resolve, reject);
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        });
+    get mintlifyPayload() {
+        return {
+            userId: vscode.env.machineId,
+            languageId: this.languageId,
+            context: this.context,
+            code: this.code,
+            source: "vscode",
+            docStyle: "JSDoc",
+            commented: false,
+        };
     }
 
-    async worker(workerId: number, resolve: Function, reject: Function) {
-        this.retry++;
-        setTimeout(() => {
-            this.mintlify
-                .get(`worker/${workerId}`)
-                .then(({ data }) => {
-                    if (data.state === "completed") {
-                        resolve(data);
-                    } else if (this.retry < this.maxRetry) {
-                        this.worker(workerId, resolve, reject);
-                    } else {
-                        reject();
-                    }
-                })
-                .catch((error) => {
-                    reject(error);
-                });
-        }, this.retryDelay);
+    async write(): Promise<string | false> {
+        try {
+            const { data } = await this.mintlify.post("write/v3", this.mintlifyPayload);
+
+            let workerState: string | boolean = false;
+            for (let retry = 0; retry <= this.retry.max; retry++) {
+                workerState = await this.worker(data?.id ?? 0);
+                if (workerState !== true) {
+                    break;
+                }
+            }
+            if (workerState === true) {
+                workerState = false;
+            }
+
+            return workerState;
+        } catch ({ message }) {
+            console.error(message);
+
+            return false;
+        }
+    }
+
+    async worker(workerId: number): Promise<string | boolean> {
+        try {
+            await runtimeAwait(this.retry.delay);
+            const { data } = await this.mintlify.get(`worker/${workerId}`);
+            if (data?.state === "completed") {
+                return data?.data?.docstring ?? false;
+            }
+
+            return true;
+        } catch ({ message }) {
+            console.error(message);
+
+            return false;
+        }
     }
 }

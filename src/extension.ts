@@ -5,15 +5,13 @@ import { Editor } from "./lib/Editor";
 namespace docTypes {
     export const activate = (extensionContext: vscode.ExtensionContext) => {
         try {
-            utils.registerCommand(extensionContext, "generate", () => {
+            utils.registerCommand(extensionContext, "generate", async () => {
                 const editor = new Editor(extensionContext);
-
-                if (editor.languageId === "typescript") {
-                    editor.generateJsDoc();
-                }
+                await editor.init();
+                await editor.generate();
             });
-        } catch (error) {
-            console.error(error);
+        } catch ({ message }) {
+            console.error(message);
         }
     };
 

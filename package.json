@@ -1,7 +1,7 @@
 {
     "name": "doctypes",
     "displayName": "DocTypes",
-    "description": "JSDoc generator for TypeScript using AI.",
+    "markdownDescription": "JSDoc generator for JavaScript, TypeScript using AI.",
     "version": "1.0.0",
     "publisher": "dalirnet",
     "engines": {
@@ -11,19 +11,22 @@
         "Programming Languages"
     ],
     "keywords": [
+        "javascript",
         "typescript",
         "documentation",
         "jsdoc"
     ],
     "activationEvents": [
         "onStartupFinished",
+        "onLanguage:javascript",
+        "onLanguage:typescript",
         "onCommand:doctypes.generate"
     ],
     "main": "dist/extension.js",
     "contributes": {
         "commands": [
             {
-                "when": "editorLangId == typescript",
+                "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
                 "command": "doctypes.generate",
                 "title": "DocTypes generate"
             }
@@ -31,7 +34,7 @@
         "menus": {
             "editor/context": [
                 {
-                    "when": "editorLangId == typescript",
+                    "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
                     "command": "doctypes.generate",
                     "group": "1_modification"
                 }
@@ -39,12 +42,248 @@
         },
         "keybindings": [
             {
-                "when": "editorLangId == typescript",
+                "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
                 "command": "doctypes.generate",
                 "key": "ctrl+alt+d",
                 "mac": "cmd+alt+d"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "Doctypes",
+            "properties": {
+                "doctypes.description": {
+                    "order": 0,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Manual",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `description` generation."
+                },
+                "doctypes.class": {
+                    "order": 1,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@class` tag generation."
+                },
+                "doctypes.abstract": {
+                    "order": 2,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@abstract` tag generation."
+                },
+                "doctypes.interface": {
+                    "order": 3,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@interface` tag generation."
+                },
+                "doctypes.typedef": {
+                    "order": 4,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@typedef` tag generation."
+                },
+                "doctypes.enum": {
+                    "order": 5,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@enum` tag generation."
+                },
+                "doctypes.async": {
+                    "order": 6,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@async` tag generation."
+                },
+                "doctypes.function": {
+                    "order": 7,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@function` tag generation."
+                },
+                "doctypes.variable": {
+                    "order": 8,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@variable` tag generation."
+                },
+                "doctypes.name": {
+                    "order": 9,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@name` tag generation."
+                },
+                "doctypes.kind": {
+                    "order": 10,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@kind` tag generation."
+                },
+                "doctypes.memberof": {
+                    "order": 11,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@memberof` tag generation."
+                },
+                "doctypes.public": {
+                    "order": 12,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@public` tag generation."
+                },
+                "doctypes.private": {
+                    "order": 13,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@private` tag generation."
+                },
+                "doctypes.protected": {
+                    "order": 14,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@protected` tag generation."
+                },
+                "doctypes.readonly": {
+                    "order": 15,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@readonly` tag generation."
+                },
+                "doctypes.instance": {
+                    "order": 16,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@instance` tag generation."
+                },
+                "doctypes.type": {
+                    "order": 17,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@type` tag generation."
+                },
+                "doctypes.param": {
+                    "order": 18,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@param` tag generation."
+                },
+                "doctypes.returns": {
+                    "order": 19,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@returns` tag generation."
+                },
+                "doctypes.extends": {
+                    "order": 20,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@extends` tag generation."
+                },
+                "doctypes.implements": {
+                    "order": 21,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@implements` tag generation."
+                },
+                "doctypes.exports": {
+                    "order": 22,
+                    "type": "string",
+                    "enum": [
+                        "Auto",
+                        "Off"
+                    ],
+                    "default": "Auto",
+                    "markdownDescription": "Type of `@exports` tag generation."
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "yarn run compile",
