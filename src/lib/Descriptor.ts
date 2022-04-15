@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import axios, { AxiosInstance } from "axios";
-import { runtimeAwait } from "./utils";
+import { getConfig, runtimeAwait } from "./utils";
 
 export class Descriptor {
     private readonly mintlify: AxiosInstance;
@@ -18,11 +18,11 @@ export class Descriptor {
 
     get mintlifyPayload() {
         return {
-            userId: vscode.env.machineId,
+            userId: getConfig("_mintlifyUserId"),
             languageId: this.languageId,
             context: this.context,
             code: this.code,
-            source: "vscode",
+            source: "web",
             docStyle: "JSDoc",
             commented: false,
         };

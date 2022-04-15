@@ -51,6 +51,12 @@
         "configuration": {
             "title": "Doctypes",
             "properties": {
+                "doctypes.mintlifyUserId": {
+                    "order": -1,
+                    "type": "string",
+                    "default": "4aeafe05-c396-4389-8d77-52e585e41932",
+                    "markdownDescription": "The custom [mintlify](https://www.mintlify.com/) userId."
+                },
                 "doctypes.description": {
                     "order": 0,
                     "type": "string",

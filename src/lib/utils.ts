@@ -24,6 +24,6 @@ export const executeCommand = (command: string, ...rest: any[]): Thenable<unknow
     return vscode.commands.executeCommand(command, ...rest);
 };
 
-export const getConfig = (config: keyof DocumentTypes): DocumentConfigTypes => {
+export const getConfig = (config: keyof DocumentTypes | "_mintlifyUserId"): DocumentConfigTypes => {
     return vscode.workspace.getConfiguration().get(`doctypes.${config.substring(1)}`) as DocumentConfigTypes;
 };
