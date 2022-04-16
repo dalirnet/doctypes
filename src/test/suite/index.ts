@@ -1,31 +1,21 @@
-import * as path from "path";
 import * as Mocha from "mocha";
-import * as glob from "glob";
+import { resolve } from "path";
 
-export const run = (): Promise<void> => {
-    const mocha = new Mocha({ ui: "tdd", color: true });
-    const testPath = path.resolve(__dirname, "..");
+export const run = (): Promise<any> => {
+    const mocha = new Mocha({
+        ui: "tdd",
+        asyncOnly: true,
+        timeout: 60000,
+        color: true,
+        reporter: "spec",
+    });
 
-    return new Promise((resolve, reject) => {
-        glob("**/**.test.js", { cwd: testPath }, (error, files) => {
-            if (error) {
-                reject(error);
+    return new Promise((success: Function, fail: Function) => {
+        mocha.addFile(resolve(__dirname, "../suite/extension.spec.js")).run((failures) => {
+            if (!failures) {
+                success();
             } else {
-                files.forEach((file) => {
-                    mocha.addFile(path.resolve(testPath, file));
-                });
-
-                try {
-                    mocha.run((failures) => {
-                        if (failures > 0) {
-                            reject(new Error(`${failures} tests failed.`));
-                        } else {
-                            resolve();
-                        }
-                    });
-                } catch (error) {
-                    reject(error);
-                }
+                fail();
             }
         });
     });

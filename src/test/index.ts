@@ -1,14 +1,16 @@
-import * as path from "path";
+import { resolve } from "path";
 import { runTests } from "@vscode/test-electron";
 
-(async () => {
-    try {
-        await runTests({
-            extensionDevelopmentPath: path.resolve(__dirname, "../../"),
-            extensionTestsPath: path.resolve(__dirname, "./suite/index"),
-        });
-    } catch (error) {
-        console.error("Failed to run tests", error);
+runTests({
+    extensionDevelopmentPath: resolve(__dirname, "../../"),
+    extensionTestsPath: resolve(__dirname, "../../dist/test/suite"),
+    launchArgs: [resolve(__dirname, "../../src/test/workspace")],
+})
+    .then(() => {
+        console.info("Succeed to run tests");
+        process.exit(0);
+    })
+    .catch(() => {
+        console.error("Failed to run tests");
         process.exit(1);
-    }
-})();
+    });

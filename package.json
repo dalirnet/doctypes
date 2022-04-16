@@ -4,22 +4,23 @@
     "markdownDescription": "JSDoc generator for JavaScript, TypeScript using AI.",
     "version": "1.0.0",
     "publisher": "dalirnet",
+    "author": "Amir Reza Dalir <dalirnet@gmail.com>",
+    "license": "MIT",
     "engines": {
         "vscode": "^1.66.0"
     },
-    "categories": [
-        "Programming Languages"
-    ],
-    "keywords": [
-        "javascript",
-        "typescript",
-        "documentation",
-        "jsdoc"
-    ],
+    "scripts": {
+        "vscode:prepublish": "yarn run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "lint": "eslint src --ext ts",
+        "test": "node ./dist/test/index.js"
+    },
     "activationEvents": [
         "onStartupFinished",
         "onLanguage:javascript",
         "onLanguage:typescript",
+        "onCommand:doctypes.custom.line",
         "onCommand:doctypes.current.line"
     ],
     "main": "dist/extension.js",
@@ -29,6 +30,11 @@
                 "title": "DocTypes Current Line",
                 "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
                 "command": "doctypes.current.line"
+            },
+            {
+                "title": "DocTypes Custom Line",
+                "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
+                "command": "doctypes.custom.line"
             }
         ],
         "menus": {
@@ -52,10 +58,20 @@
             "title": "Doctypes",
             "properties": {
                 "doctypes.mintlifyUserId": {
-                    "order": -1,
+                    "order": -2,
                     "type": "string",
                     "default": "4aeafe05-c396-4389-8d77-52e585e41932",
-                    "markdownDescription": "The custom [mintlify](https://www.mintlify.com/) userId."
+                    "markdownDescription": "The custom Mintlify `userId`, See [Mintlify](https://www.mintlify.com/) for more details."
+                },
+                "doctypes.mintlifyContext": {
+                    "order": -1,
+                    "type": "string",
+                    "enum": [
+                        "Full",
+                        "Single"
+                    ],
+                    "default": "Full",
+                    "markdownDescription": "Type of Mintlify `context`, full of page or single line."
                 },
                 "doctypes.description": {
                     "order": 0,
@@ -291,19 +307,10 @@
             }
         }
     },
-    "scripts": {
-        "vscode:prepublish": "yarn run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "lint": "eslint src --ext ts",
-        "test": "node ./dist/test/index.js"
-    },
     "repository": {
         "type": "git",
         "url": "https://github.com/dalirnet/doctypes.git"
     },
-    "author": "Amir Reza Dalir <dalirnet@gmail.com>",
-    "license": "MIT",
     "devDependencies": {
         "@types/glob": "^7.2.0",
         "@types/lodash": "^4.14.181",
@@ -320,5 +327,14 @@
     },
     "dependencies": {
         "axios": "^0.26.1"
-    }
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "javascript",
+        "typescript",
+        "documentation",
+        "jsdoc"
+    ]
 }
