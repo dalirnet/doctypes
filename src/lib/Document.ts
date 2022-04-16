@@ -277,6 +277,10 @@ export class Document {
                         return params;
                     }, [] as DocumentTypes["_param"]);
                 }
+
+                if (this.context._function === "constructor") {
+                    this.context._returns = "";
+                }
             }
 
             if (this.context._name && firstTip.symbol) {
