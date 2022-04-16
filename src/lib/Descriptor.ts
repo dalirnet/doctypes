@@ -17,7 +17,7 @@ export class Descriptor {
 
     get mintlifyPayload() {
         return {
-            userId: getConfig("_mintlifyUserId"),
+            userId: getConfig("mintlifyUserId"),
             languageId: this.languageId,
             context: this.context,
             code: this.code,

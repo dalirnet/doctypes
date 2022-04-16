@@ -54,9 +54,15 @@ export class DocTypes {
     }
 
     lineCode(line: number): string {
-        const { text } = this.context.document.lineAt(line);
+        try {
+            const { text } = this.context.document.lineAt(line);
 
-        return text;
+            return text;
+        } catch (error) {
+            errorHandler(error, "Invalid line number.");
+
+            return "";
+        }
     }
 
     lineSymbols(line: number): EditorSymbolTypes[] {
@@ -68,7 +74,8 @@ export class DocTypes {
     }
 
     getWords(line: number): EditorWordTypes[] {
-        const anyWords = [...this.lineCode(line).matchAll(REGEXP_ANY_WORDS)];
+        const lineCode = this.lineCode(line);
+        const anyWords = [...lineCode.matchAll(REGEXP_ANY_WORDS)];
         return anyWords.map((word) => {
             return {
                 value: word[0],
@@ -79,40 +86,42 @@ export class DocTypes {
 
     async getDefinitions(line: number): Promise<EditorDefinitionTypes> {
         const lineCode = this.lineCode(line);
-        const lineWords = this.getWords(line);
-        const lineSymbols = this.lineSymbols(line);
         const lineWhitespace = lineCode.match(REGEXP_FIRST_SPACES)?.[0]?.length ?? 0;
-
         let definitionTips: EditorDefinitionTypes["tips"] = [];
-        for (const { position } of lineWords) {
-            const symbol = lineSymbols.find(
-                (symbol) => position.character >= symbol.position.start && position.character <= symbol.position.end
-            );
+        if (lineCode) {
+            const lineWords = this.getWords(line);
+            const lineSymbols = this.lineSymbols(line);
 
-            try {
-                const hoverTips = await executeCommand("vscode.executeHoverProvider", this.uri, position);
-                for (const { contents } of hoverTips as vscode.Hover[]) {
-                    for (const { value } of contents as vscode.MarkdownString[]) {
-                        const validTip = value.match(REGEXP_VALID_TIP);
-                        if (validTip) {
-                            const value = validTip[1]
-                                .replace("(loading...)", "")
-                                .replace(REGEXP_MULTI_SPACES, " ")
-                                .trim()
-                                .replace(REGEXP_PARENS_LINE, "$1")
-                                .trim();
+            for (const { position } of lineWords) {
+                const symbol = lineSymbols.find(
+                    (symbol) => position.character >= symbol.position.start && position.character <= symbol.position.end
+                );
 
-                            const existedTip = definitionTips.findIndex((tip) => tip.value === value);
-                            if (existedTip === -1) {
-                                definitionTips.push({ value, symbol });
-                            } else if (!definitionTips[existedTip].symbol && symbol) {
-                                definitionTips[existedTip].symbol = symbol;
+                try {
+                    const hoverTips = await executeCommand("vscode.executeHoverProvider", this.uri, position);
+                    for (const { contents } of hoverTips as vscode.Hover[]) {
+                        for (const { value } of contents as vscode.MarkdownString[]) {
+                            const validTip = value.match(REGEXP_VALID_TIP);
+                            if (validTip) {
+                                const value = validTip[1]
+                                    .replace("(loading...)", "")
+                                    .replace(REGEXP_MULTI_SPACES, " ")
+                                    .trim()
+                                    .replace(REGEXP_PARENS_LINE, "$1")
+                                    .trim();
+
+                                const existedTip = definitionTips.findIndex((tip) => tip.value === value);
+                                if (existedTip === -1) {
+                                    definitionTips.push({ value, symbol });
+                                } else if (!definitionTips[existedTip].symbol && symbol) {
+                                    definitionTips[existedTip].symbol = symbol;
+                                }
                             }
                         }
                     }
+                } catch (error) {
+                    errorHandler(error, "Vscode command.executeHoverProvider has an unexpected error.");
                 }
-            } catch (error) {
-                errorHandler(error, "Vscode command.executeHoverProvider has an unexpected error.");
             }
         }
 
@@ -139,7 +148,11 @@ export class DocTypes {
 
     async addDescription({ position, code, whitespace }: EditorDefinitionTypes): Promise<boolean> {
         try {
-            const context = this.context.document.getText();
+            let context = "";
+            if (getConfig("mintlifyContext") === "Full") {
+                context = this.context.document.getText();
+            }
+
             const newDescription = await new Descriptor(context, code, this.languageId).write();
             if (newDescription) {
                 const currentDescription = this.context.document.lineAt(position.line + 1).text;
@@ -178,7 +191,7 @@ export class DocTypes {
             title: "DocTypes is being describe",
             location: vscode.ProgressLocation.Notification,
         };
-        vscode.window.withProgress(progressOptions, async (progress): Promise<any> => {
+        await vscode.window.withProgress(progressOptions, async (progress): Promise<any> => {
             const definition = await this.getDefinitions(line);
             if (!definition.code.match(REGEXP_IGNORE_LINE)) {
                 if (await this.addDocument(new Document(definition).build(), definition.position)) {
@@ -201,8 +214,13 @@ export class DocTypes {
         });
     }
 
-    async currentLine() {
+    async generateForCurrentLine() {
         await this.init();
         await this.generate(this.activeLine);
+    }
+
+    async generateForCustomLine(line: number = 1) {
+        await this.init();
+        await this.generate(line - 1);
     }
 }

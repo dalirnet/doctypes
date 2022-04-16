@@ -3,6 +3,7 @@ export const REGEXP_ANY_WORDS = /\w+/g;
 export const REGEXP_VALID_TIP = /\n```typescript\n(.*)\n```\n/is;
 
 export const REGEXP_FIRST_SPACES = /^\s+/;
+export const REGEXP_FIRST_UDERLINE = /^\_+/;
 
 export const REGEXP_MULTI_SPACES = /\s+/g;
 
@@ -31,10 +32,12 @@ export const REGEXP_PROTECTED_LINE = /^protected\s/i;
 export const REGEXP_READONY_LINE = /^(public|private|protected)\s+readonly\s+/i;
 
 export const REGEXP_FUNCTION_TIP =
-    /(constructor|function|method|property|const|let|var)(?:\s+)([\w.]+)(?:\s+)?(?::)?(?:\s+)?(?:\((.*)\)|function)(?:\s+)?(?:(?::|=>)(?:\s+)(.*))?/i;
+    /(constructor|function|method|property|const|let|var)(?:\s+)([\w.]+)(?:\s+)?(?::)?(?:\s+)?(?:\((.*)\)|function)(?:\s+)?(?:(?::|=>)(?:\s+)?(.*))?/i;
+
+export const REGEXP_GETTER_SETTER_TIP = /(getter|setter)(?:\s+)([\w.]+)(?:\s+)?(?::)?(?:\s+)?(.*)?/i;
 
 export const REGEXP_VARIABLE_TIP =
-    /(property|enum\smember|const|let|var)(?:\s+)([\w.]+)(?:<.*>)?([\w.]+)?(?:\s+)?(?:[\:\=])(?:\s+)?(.*)?/i;
+    /(property|enum\smember|const|let|var)(?:\s+)([\w.]+)(?:<.*>)?([\w.]+)?(?:\s+)?(?:[\?\:\=]+)(?:\s+)?(.*)?/i;
 
 export const REGEXP_TYPE_PARAMETER_TIP = /type\s+parameter\s+(\w+)\s+in\s+/i;
 

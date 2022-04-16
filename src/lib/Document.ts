@@ -8,6 +8,7 @@ import {
     REGEXP_ENUM_LINE,
     REGEXP_EXPORT_LINE,
     REGEXP_FUNCTION_TIP,
+    REGEXP_GETTER_SETTER_TIP,
     REGEXP_INTERFACE_LINE,
     REGEXP_PRIVATE_LINE,
     REGEXP_PROTECTED_LINE,
@@ -56,7 +57,7 @@ export const documentBuilders: DocumentBuilderTypes = {
             `@${
                 kind === "constructor"
                     ? "constructor"
-                    : kind === "property" || kind === "method"
+                    : kind === "property" || kind === "method" || kind === "getter" || kind === "setter"
                     ? "method"
                     : "function"
             }`,
@@ -191,16 +192,27 @@ export class Document {
                     this.context._variable = functionTip[1];
                     this.context._type = "function";
                 }
+
                 this.context._returns = functionTip[4];
             } else {
-                const variableTip = firstTip.value.match(REGEXP_VARIABLE_TIP);
-                if (variableTip) {
-                    this.context._variable = variableTip[1];
-                    this.context._name = variableTip[2] + (variableTip[3] || "");
-                    this.context._type = variableTip[4];
+                const getterSetterTip = firstTip.value.match(REGEXP_GETTER_SETTER_TIP);
+                if (getterSetterTip) {
+                    this.context._name = getterSetterTip[2];
+                    this.context._function = getterSetterTip[1];
 
-                    if (this.code.match(REGEXP_CONTAINS_NEW)) {
-                        this.context._instance = true;
+                    if (getterSetterTip[1] === "getter") {
+                        this.context._returns = getterSetterTip[3];
+                    }
+                } else {
+                    const variableTip = firstTip.value.match(REGEXP_VARIABLE_TIP);
+                    if (variableTip) {
+                        this.context._variable = variableTip[1];
+                        this.context._name = variableTip[2] + (variableTip[3] || "");
+                        this.context._type = variableTip[4];
+
+                        if (this.code.match(REGEXP_CONTAINS_NEW)) {
+                            this.context._instance = true;
+                        }
                     }
                 }
             }

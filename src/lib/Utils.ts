@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { inspect } from "util";
-import { DocumentConfigTypes, DocumentTypes } from "./Types";
+import { ConfigKeysTypes, ConfigValuesTypes } from "./Types";
+import { REGEXP_FIRST_UDERLINE } from "./Regexp";
 
 export const runtimeAwait = (delay: number = 1000): Promise<any> => {
     return new Promise((resolve) => {
@@ -24,8 +25,14 @@ export const executeCommand = (command: string, ...rest: any[]): Thenable<unknow
     return vscode.commands.executeCommand(command, ...rest);
 };
 
-export const getConfig = (config: keyof DocumentTypes | "_mintlifyUserId"): DocumentConfigTypes => {
-    return vscode.workspace.getConfiguration().get(`doctypes.${config.substring(1)}`) as DocumentConfigTypes;
+export const getConfig = (key: ConfigKeysTypes): ConfigValuesTypes => {
+    return vscode.workspace
+        .getConfiguration()
+        .get(`doctypes.${key.replace(REGEXP_FIRST_UDERLINE, "")}`) as ConfigValuesTypes;
+};
+
+export const updateConfig = (key: ConfigKeysTypes, value: ConfigValuesTypes): Thenable<void> => {
+    return vscode.workspace.getConfiguration().update(`doctypes.${key.replace(REGEXP_FIRST_UDERLINE, "")}`, value);
 };
 
 export const errorHandler = (error: any, message: string): void => {

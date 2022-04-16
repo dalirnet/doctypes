@@ -32,8 +32,6 @@ export type EditorSnippetTypes = {
     placeholder?: string;
 };
 
-export type DocumentConfigTypes = "Auto" | "Manual" | "Off";
-
 export type DocumentTypes = {
     _description: boolean;
     _class: boolean;
@@ -71,3 +69,12 @@ export type DocumentBuilderEntrieTypes = [keyof DocumentBuilderTypes, DocumentBu
 export type DocumentBuilderTypes = {
     [T in keyof DocumentTypes]: DocumentBuilderCallbackTypes<DocumentTypes[T]>;
 };
+
+export type ConfigKeysTypes =
+    | keyof {
+          [P in keyof DocumentTypes as string & P extends `${"_"}${infer V}` ? V | P : P]: any;
+      }
+    | "mintlifyUserId"
+    | "mintlifyContext";
+
+export type ConfigValuesTypes = "Full" | "Single" | "Auto" | "Manual" | "Off";
