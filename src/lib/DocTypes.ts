@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Document } from "./Document";
 import { Descriptor } from "./Descriptor";
-import { debug, executeCommand, getConfig } from "./utils";
+import { errorHandler, executeCommand, getConfig } from "./Utils";
 import { EditorDefinitionTypes, EditorSymbolTypes, EditorWordTypes } from "./Types";
 import {
     REGEXP_ANY_WORDS,
@@ -12,7 +12,7 @@ import {
     REGEXP_VALID_TIP,
 } from "./Regexp";
 
-export class Editor {
+export class DocTypes {
     public readonly symbols: Record<number, EditorSymbolTypes[]> = {};
     constructor(public readonly extensionContext: vscode.ExtensionContext) {}
 
@@ -88,6 +88,7 @@ export class Editor {
             const symbol = lineSymbols.find(
                 (symbol) => position.character >= symbol.position.start && position.character <= symbol.position.end
             );
+
             try {
                 const hoverTips = await executeCommand("vscode.executeHoverProvider", this.uri, position);
                 for (const { contents } of hoverTips as vscode.Hover[]) {
@@ -111,7 +112,7 @@ export class Editor {
                     }
                 }
             } catch (error) {
-                console.error(error);
+                errorHandler(error, "Vscode command.executeHoverProvider has an unexpected error.");
             }
         }
 
@@ -129,8 +130,8 @@ export class Editor {
     ): Promise<boolean> {
         try {
             return await this.context.insertSnippet(snippetString, position);
-        } catch ({ message }) {
-            console.error(message);
+        } catch (error) {
+            errorHandler(error, "Vscode editor.insertSnippet has an unexpected error.");
 
             return false;
         }
@@ -154,8 +155,8 @@ export class Editor {
             }
 
             return false;
-        } catch ({ message }) {
-            console.error(message);
+        } catch (error) {
+            errorHandler(error, "Vscode editor.edit has an unexpected error.");
 
             return false;
         }
@@ -168,11 +169,11 @@ export class Editor {
                 this.initSymbols(documentSymbol as vscode.DocumentSymbol[]);
             }
         } catch (error) {
-            console.error(error);
+            errorHandler(error, "Vscode command.executeDocumentSymbolProvider has an unexpected error.");
         }
     }
 
-    async generate(line: number = this.activeLine) {
+    async generate(line: number) {
         const progressOptions = {
             title: "DocTypes is being describe",
             location: vscode.ProgressLocation.Notification,
@@ -182,11 +183,15 @@ export class Editor {
             if (!definition.code.match(REGEXP_IGNORE_LINE)) {
                 if (await this.addDocument(new Document(definition).build(), definition.position)) {
                     if (getConfig("_description") === "Auto") {
-                        let progressState = 0;
+                        let attempt = 1;
+                        let percent = 0;
                         const progressTimer = setInterval(() => {
-                            progress.report({
-                                message: `${++progressState > 100 ? 100 : progressState}%`,
-                            });
+                            percent++;
+                            if (percent > 100) {
+                                attempt++;
+                                percent = 0;
+                            }
+                            progress.report({ message: `Attempt ${attempt} - ${percent}%` });
                         }, 100);
                         await this.addDescription(definition);
                         clearInterval(progressTimer);
@@ -194,5 +199,10 @@ export class Editor {
                 }
             }
         });
+    }
+
+    async currentLine() {
+        await this.init();
+        await this.generate(this.activeLine);
     }
 }

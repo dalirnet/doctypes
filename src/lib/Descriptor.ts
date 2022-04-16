@@ -1,6 +1,5 @@
-import * as vscode from "vscode";
 import axios, { AxiosInstance } from "axios";
-import { getConfig, runtimeAwait } from "./utils";
+import { errorHandler, getConfig, runtimeAwait } from "./Utils";
 
 export class Descriptor {
     private readonly mintlify: AxiosInstance;
@@ -44,8 +43,8 @@ export class Descriptor {
             }
 
             return workerState;
-        } catch ({ message }) {
-            console.error(message);
+        } catch (error) {
+            errorHandler(error, "The Mintlify writer has an unknown error.");
 
             return false;
         }
@@ -60,8 +59,8 @@ export class Descriptor {
             }
 
             return true;
-        } catch ({ message }) {
-            console.error(message);
+        } catch (error) {
+            errorHandler(error, "The Mintlify worker has an unknown error.");
 
             return false;
         }

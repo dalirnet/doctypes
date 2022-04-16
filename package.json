@@ -20,22 +20,22 @@
         "onStartupFinished",
         "onLanguage:javascript",
         "onLanguage:typescript",
-        "onCommand:doctypes.generate"
+        "onCommand:doctypes.current.line"
     ],
     "main": "dist/extension.js",
     "contributes": {
         "commands": [
             {
+                "title": "DocTypes Current Line",
                 "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
-                "command": "doctypes.generate",
-                "title": "DocTypes generate"
+                "command": "doctypes.current.line"
             }
         ],
         "menus": {
             "editor/context": [
                 {
                     "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
-                    "command": "doctypes.generate",
+                    "command": "doctypes.current.line",
                     "group": "1_modification"
                 }
             ]
@@ -43,7 +43,7 @@
         "keybindings": [
             {
                 "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
-                "command": "doctypes.generate",
+                "command": "doctypes.current.line",
                 "key": "ctrl+alt+d",
                 "mac": "cmd+alt+d"
             }

@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { debug } from "console";
 import {
     REGEXP_ADDITIONAL_PARENS,
     REGEXP_CLASS_LINE,
@@ -28,7 +27,7 @@ import {
     DocumentTypes,
     EditorDefinitionTypes,
 } from "./Types";
-import { getConfig } from "./utils";
+import { getConfig } from "./Utils";
 
 export const documentBuilders: DocumentBuilderTypes = {
     _description() {
