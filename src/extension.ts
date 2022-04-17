@@ -4,7 +4,7 @@ import { errorHandler, registerCommand } from "./lib/utils";
 
 export const activate = (extensionContext: vscode.ExtensionContext) => {
     try {
-        registerCommand(extensionContext, "custom.line", async (line?: any) => {
+        registerCommand(extensionContext, "custom.line", async (line?: any, emmit: boolean = true) => {
             if (!line) {
                 line = parseInt(
                     (await vscode.window.showInputBox({
@@ -17,10 +17,10 @@ export const activate = (extensionContext: vscode.ExtensionContext) => {
                 );
             }
 
-            await new DocTypes(extensionContext).generateForCustomLine(line);
+            return await new DocTypes(extensionContext).generateForCustomLine(line, emmit);
         });
         registerCommand(extensionContext, "current.line", async () => {
-            await new DocTypes(extensionContext).generateForCurrentLine();
+            return await new DocTypes(extensionContext).generateForCurrentLine();
         });
     } catch (error) {
         errorHandler(error, "Ooops! The DocTypes has an unexpected error.");

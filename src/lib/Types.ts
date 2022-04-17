@@ -1,5 +1,10 @@
 import * as vscode from "vscode";
 
+export type DoctypesRetuenType = {
+    type: string;
+    value: string;
+};
+
 export type EditorSymbolTypes = {
     name: string;
     kind: string;
@@ -68,6 +73,11 @@ export type DocumentBuilderEntrieTypes = [keyof DocumentBuilderTypes, DocumentBu
 
 export type DocumentBuilderTypes = {
     [T in keyof DocumentTypes]: DocumentBuilderCallbackTypes<DocumentTypes[T]>;
+};
+
+export type DocumentReturnTypes = {
+    tags: string[];
+    snippet: vscode.SnippetString;
 };
 
 export type ConfigKeysTypes =

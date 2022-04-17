@@ -7,6 +7,7 @@ import {
     REGEXP_DOT_BETWEEN,
     REGEXP_ENUM_LINE,
     REGEXP_EXPORT_LINE,
+    REGEXP_FIRST_ATSIGN,
     REGEXP_FUNCTION_TIP,
     REGEXP_GETTER_SETTER_TIP,
     REGEXP_INTERFACE_LINE,
@@ -25,6 +26,7 @@ import {
     DocumentBuilderInputTypes,
     DocumentBuilderTypes,
     DocumentContextTypes,
+    DocumentReturnTypes,
     DocumentTypes,
     EditorDefinitionTypes,
 } from "./Types";
@@ -300,18 +302,25 @@ export class Document {
         }
     }
 
-    build(): vscode.SnippetString {
-        let lines: string[] = [];
-        lines.push(`${this.whitespace}/**`);
+    build(): DocumentReturnTypes {
+        let snippets: string[] = [];
+        let tags: string[] = [];
+        snippets.push(`${this.whitespace}/**`);
         for (const [name, builder] of Object.entries(this.builders) as DocumentBuilderEntrieTypes[]) {
             if (this.context[name] && getConfig(name) !== "Off") {
                 for (const line of builder(this.context[name] as DocumentBuilderInputTypes)) {
-                    lines.push(`\n${this.whitespace} * ${line}`);
+                    snippets.push(`\n${this.whitespace} * ${line}`);
+                    if (line.match(REGEXP_FIRST_ATSIGN)) {
+                        tags.push(line);
+                    }
                 }
             }
         }
-        lines.push(`\n${this.whitespace} */\n`);
+        snippets.push(`\n${this.whitespace} */\n`);
 
-        return new vscode.SnippetString(lines.join(""));
+        return {
+            tags,
+            snippet: new vscode.SnippetString(snippets.join("")),
+        };
     }
 }

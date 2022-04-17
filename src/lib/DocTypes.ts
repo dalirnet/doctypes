@@ -186,15 +186,16 @@ export class DocTypes {
         }
     }
 
-    async generate(line: number) {
+    async generate(line: number, emmit: boolean): Promise<string[]> {
         const progressOptions = {
             title: "DocTypes is being describe",
             location: vscode.ProgressLocation.Notification,
         };
-        await vscode.window.withProgress(progressOptions, async (progress): Promise<any> => {
+        return await vscode.window.withProgress(progressOptions, async (progress): Promise<string[]> => {
             const definition = await this.getDefinitions(line);
             if (!definition.code.match(REGEXP_IGNORE_LINE)) {
-                if (await this.addDocument(new Document(definition).build(), definition.position)) {
+                const documents = new Document(definition).build();
+                if (emmit && (await this.addDocument(documents.snippet, definition.position))) {
                     if (getConfig("_description") === "Auto") {
                         let attempt = 1;
                         let percent = 0;
@@ -210,17 +211,21 @@ export class DocTypes {
                         clearInterval(progressTimer);
                     }
                 }
+
+                return documents.tags;
             }
+
+            return [];
         });
     }
 
-    async generateForCurrentLine() {
+    async generateForCurrentLine(emmit: boolean = true): Promise<string[]> {
         await this.init();
-        await this.generate(this.activeLine);
+        return await this.generate(this.activeLine, emmit);
     }
 
-    async generateForCustomLine(line: number = 1) {
+    async generateForCustomLine(line: number = 1, emmit: boolean = true): Promise<string[]> {
         await this.init();
-        await this.generate(line - 1);
+        return await this.generate(line - 1, emmit);
     }
 }

@@ -3,7 +3,10 @@ export const REGEXP_ANY_WORDS = /\w+/g;
 export const REGEXP_VALID_TIP = /\n```typescript\n(.*)\n```\n/is;
 
 export const REGEXP_FIRST_SPACES = /^\s+/;
+
 export const REGEXP_FIRST_UDERLINE = /^\_+/;
+
+export const REGEXP_FIRST_ATSIGN = /^\@/;
 
 export const REGEXP_MULTI_SPACES = /\s+/g;
 
