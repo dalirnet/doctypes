@@ -35,7 +35,7 @@ export const REGEXP_PROTECTED_LINE = /^protected\s/i;
 export const REGEXP_READONY_LINE = /^(public|private|protected)\s+readonly\s+/i;
 
 export const REGEXP_FUNCTION_TIP =
-    /(constructor|function|method|property|const|let|var)(?:\s+)([\w.]+)(?:\s+)?(?::)?(?:\s+)?(?:\((.*)\)|function)(?:\s+)?(?:(?::|=>)(?:\s+)?(.*))?/i;
+    /(constructor|function|method|property|const|let|var)(?:\s+)([\w.]+)(?:\?)?(?:\s+)?(?::)?(?:\s+)?(?:\((.*)\)|function)(?:\s+)?(?:(?::|=>)(?:\s+)?(.*))?/i;
 
 export const REGEXP_GETTER_SETTER_TIP = /(getter|setter)(?:\s+)([\w.]+)(?:\s+)?(?::)?(?:\s+)?(.*)?/i;
 
