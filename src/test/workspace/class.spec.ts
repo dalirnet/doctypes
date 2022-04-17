@@ -1,6 +1,6 @@
-import { Id, Name, Age } from "./_types";
-import { UserAbstract } from "./_abstract";
-import { PersonInterface } from "./_interface";
+import { Id, Name, Age } from "./type.spec";
+import { UserAbstract } from "./abstract.spec";
+import { PersonInterface } from "./interface.spec";
 
 /**
  * Description
@@ -16,34 +16,37 @@ export class User extends UserAbstract implements PersonInterface {
     /**
      * Description
      *
-     * @method
+     * @property
      * @name id
      * @kind property
      * @memberof User
      * @public
      * @readonly
+     * @type {Id}
      */
     public readonly id: Id;
 
     /**
      * Description
      *
-     * @method
+     * @property
      * @name name
      * @kind property
      * @memberof User
      * @public
+     * @type {string}
      */
     public name?: Name;
 
     /**
      * Description
      *
-     * @method
+     * @property
      * @name _age
      * @kind property
      * @memberof User
      * @protected
+     * @type {number}
      */
     protected _age?: Age;
 

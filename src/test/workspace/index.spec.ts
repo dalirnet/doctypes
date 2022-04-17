@@ -1,6 +1,6 @@
-import { User } from "./_class";
-import { createUserId } from "./_function";
-import { Id } from "./_types";
+import { User } from "./class.spec";
+import { createUserId } from "./function.spec";
+import { Id } from "./type.spec";
 
 /**
  * Description

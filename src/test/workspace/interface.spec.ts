@@ -1,4 +1,4 @@
-import { Id, Name } from "./_types";
+import { Id, Name } from "./type.spec";
 
 /**
  * Description

@@ -1,4 +1,4 @@
-import { Age } from "./_types";
+import { Age } from "./type.spec";
 
 /**
  * Description

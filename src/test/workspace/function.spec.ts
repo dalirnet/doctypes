@@ -1,5 +1,5 @@
-import { Id } from "./_types";
-import { MAX, MIN } from "./_variable";
+import { Id } from "./type.spec";
+import { MAX, MIN } from "./variable.spec";
 
 /**
  * Description
