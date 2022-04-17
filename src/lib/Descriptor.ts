@@ -18,11 +18,11 @@ export class Descriptor {
     get mintlifyPayload() {
         return {
             userId: getConfig("mintlifyUserId"),
-            languageId: this.languageId,
+            languageId: "auto",
             context: this.context,
             code: this.code,
             source: "web",
-            docStyle: "JSDoc",
+            docStyle: "Auto-detect",
             commented: false,
         };
     }
