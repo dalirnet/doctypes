@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { executeCommand, runtimeAwait } from "../../lib/Utils";
+import { executeCommand, runtimeAwait, updateConfig } from "../../lib/Utils";
 import { openWorkspaceFile, readComments } from "./SpecUtils";
 
 const specs = [
@@ -179,6 +179,7 @@ for (const { file, targets } of specs) {
     suite(file, async () => {
         suiteSetup(async () => {
             await openWorkspaceFile(file);
+            await updateConfig("description", "Manual");
             await runtimeAwait(1000);
         });
 
