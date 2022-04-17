@@ -28,10 +28,20 @@ import {
     DocumentContextTypes,
     DocumentReturnTypes,
     DocumentTypes,
+    EditorDefinitionsTipTypes,
     EditorDefinitionTypes,
 } from "./Types";
 import { getConfig } from "./Utils";
 
+/**
+ * A constant that is being exported.
+ *
+ * @constant
+ * @name documentBuilders
+ * @kind variable
+ * @type {DocumentBuilderTypes}
+ * @exports
+ */
 export const documentBuilders: DocumentBuilderTypes = {
     _description() {
         return ["${1:Description}", ""];
@@ -118,30 +128,112 @@ export const documentBuilders: DocumentBuilderTypes = {
     },
 };
 
+/**
+ * Exporting the class Document.
+ *
+ * @class
+ * @name Document
+ * @kind class
+ * @exports
+ */
 export class Document {
-    private builders = documentBuilders;
+    /**
+     * Assigning the value of the variable `documentBuilders` to the variable `builders`
+     *
+     * @property
+     * @name builders
+     * @kind property
+     * @memberof Document
+     * @private
+     * @type {DocumentBuilderTypes}
+     */
+    private builders: DocumentBuilderTypes = documentBuilders;
+
+    /**
+     * Creating a new interface called DocumentContextTypes.
+     *
+     * @property
+     * @name context
+     * @kind property
+     * @memberof Document
+     * @private
+     * @type {Partial<DocumentTypes>}
+     */
     private context: DocumentContextTypes = {
         _description: true,
     };
 
+    /**
+     * A constructor that is being called when the class is being instantiated.
+     *
+     * @constructor
+     * @name Document
+     * @param {EditorDefinitionTypes} definition
+     */
     constructor(private readonly definition: EditorDefinitionTypes) {
         this.parse();
     }
 
-    get code() {
+    /**
+     * A getter method.
+     *
+     * @method
+     * @name (get) code
+     * @kind property
+     * @memberof Document
+     * @returns {string}
+     */
+    get code(): string {
         return this.definition.code;
     }
 
-    get tips() {
+    /**
+     * A getter method.
+     *
+     * @method
+     * @name (get) tips
+     * @kind property
+     * @memberof Document
+     * @returns {EditorDefinitionsTipTypes[]}
+     */
+    get tips(): EditorDefinitionsTipTypes[] {
         return this.definition.tips;
     }
 
-    get whitespace() {
+    /**
+     * A getter method.
+     *
+     * @method
+     * @name (get) whitespace
+     * @kind property
+     * @memberof Document
+     * @returns {string}
+     */
+    get whitespace(): string {
         return this.definition.whitespace;
     }
 
+    /**
+     * A function declaration.
+     *
+     * @method
+     * @name parse
+     * @kind method
+     * @memberof Document
+     * @returns {void}
+     */
     parse(): void {
-        const classLine = this.code.match(REGEXP_CLASS_LINE);
+        /**
+         * Matching the class line in the code.
+         *
+         * @constant
+         * @name classLine
+         * @kind variable
+         * @memberof Document.parse
+         * @type {RegExpMatchArray}
+         */
+        const classLine: RegExpMatchArray = this.code.match(REGEXP_CLASS_LINE) as RegExpMatchArray;
+
         if (classLine) {
             this.context._class = true;
             this.context._name = classLine[4];
@@ -158,17 +250,47 @@ export class Document {
                 this.context._implements = classLine[8].split(",");
             }
         } else {
-            const interfaceLine = this.code.match(REGEXP_INTERFACE_LINE);
+            /**
+             * It's using a regular expression to find the interface line in the code.
+             *
+             * @constant
+             * @name interfaceLine
+             * @kind variable
+             * @memberof Document.parse
+             * @type {RegExpMatchArray}
+             */
+            const interfaceLine: RegExpMatchArray = this.code.match(REGEXP_INTERFACE_LINE) as RegExpMatchArray;
+
             if (interfaceLine) {
                 this.context._interface = true;
                 this.context._name = interfaceLine[3];
             } else {
-                const typedefLine = this.code.match(REGEXP_TYPEDEF_LINE);
+                /**
+                 * Matching the typedefLine with the regular expression.
+                 *
+                 * @constant
+                 * @name typedefLine
+                 * @kind variable
+                 * @memberof Document.parse
+                 * @type {RegExpMatchArray}
+                 */
+                const typedefLine: RegExpMatchArray = this.code.match(REGEXP_TYPEDEF_LINE) as RegExpMatchArray;
+
                 if (typedefLine) {
                     this.context._typedef = true;
                     this.context._name = typedefLine[3];
                 } else {
-                    const enumLine = this.code.match(REGEXP_ENUM_LINE);
+                    /**
+                     * Matching the regular expression REGEXP_ENUM_LINE to the code.
+                     *
+                     * @constant
+                     * @name enumLine
+                     * @kind variable
+                     * @memberof Document.parse
+                     * @type {RegExpMatchArray}
+                     */
+                    const enumLine: RegExpMatchArray = this.code.match(REGEXP_ENUM_LINE) as RegExpMatchArray;
+
                     if (enumLine) {
                         this.context._enum = true;
                         this.context._name = enumLine[3];
@@ -177,15 +299,44 @@ export class Document {
             }
         }
 
-        const containsAsync = this.code.match(REGEXP_CONTAINS_ASYNC);
+        /**
+         * Checking if the code contains the word async.
+         *
+         * @constant
+         * @name containsAsync
+         * @kind variable
+         * @memberof Document.parse
+         * @type {RegExpMatchArray}
+         */
+        const containsAsync: RegExpMatchArray = this.code.match(REGEXP_CONTAINS_ASYNC) as RegExpMatchArray;
+
         if (containsAsync) {
             this.context._async = true;
         }
 
         if (this.tips.length > 0) {
-            const firstTip = this.tips[0];
+            /**
+             * Accessing the first element in the tips array.
+             *
+             * @constant
+             * @name firstTip
+             * @kind variable
+             * @memberof Document.parse
+             * @type {EditorDefinitionsTipTypes}
+             */
+            const firstTip: EditorDefinitionsTipTypes = this.tips[0];
 
-            const functionTip = firstTip.value.match(REGEXP_FUNCTION_TIP);
+            /**
+             * Using the regular expression to match the firstTip.value.
+             *
+             * @constant
+             * @name functionTip
+             * @kind variable
+             * @memberof Document.parse
+             * @type {RegExpMatchArray}
+             */
+            const functionTip: RegExpMatchArray = firstTip.value.match(REGEXP_FUNCTION_TIP) as RegExpMatchArray;
+
             if (functionTip) {
                 this.context._name = functionTip[2];
                 if (functionTip[1] !== "property" || this.context._name.match(REGEXP_DOT_BETWEEN)) {
@@ -197,7 +348,19 @@ export class Document {
 
                 this.context._returns = functionTip[4];
             } else {
-                const getterSetterTip = firstTip.value.match(REGEXP_GETTER_SETTER_TIP);
+                /**
+                 * The above code is using the regular expression to match the getter and setter tip.
+                 *
+                 * @constant
+                 * @name getterSetterTip
+                 * @kind variable
+                 * @memberof Document.parse
+                 * @type {RegExpMatchArray}
+                 */
+                const getterSetterTip: RegExpMatchArray = firstTip.value.match(
+                    REGEXP_GETTER_SETTER_TIP
+                ) as RegExpMatchArray;
+
                 if (getterSetterTip) {
                     this.context._name = getterSetterTip[2];
                     this.context._function = getterSetterTip[1];
@@ -206,7 +369,17 @@ export class Document {
                         this.context._returns = getterSetterTip[3];
                     }
                 } else {
-                    const variableTip = firstTip.value.match(REGEXP_VARIABLE_TIP);
+                    /**
+                     * The above code is using the match() method to find the firstTip variable and return the value of the variable.
+                     *
+                     * @constant
+                     * @name variableTip
+                     * @kind variable
+                     * @memberof Document.parse
+                     * @type {RegExpMatchArray}
+                     */
+                    const variableTip: RegExpMatchArray = firstTip.value.match(REGEXP_VARIABLE_TIP) as RegExpMatchArray;
+
                     if (variableTip) {
                         this.context._variable = variableTip[1];
                         this.context._name = variableTip[2] + (variableTip[3] || "");
@@ -233,7 +406,19 @@ export class Document {
 
             if (this.context._interface || this.context._typedef) {
                 this.context._param = this.tips.reduce((params, tip) => {
-                    const typeParameterTip = tip.value.match(REGEXP_TYPE_PARAMETER_TIP);
+                    /**
+                     * Using a regular expression to match the tip.value to the REGEXP_TYPE_PARAMETER_TIP.
+                     *
+                     * @constant
+                     * @name typeParameterTip
+                     * @kind variable
+                     * @memberof Document.parse.tips.reduce() callback
+                     * @type {RegExpMatchArray}
+                     */
+                    const typeParameterTip: RegExpMatchArray = tip.value.match(
+                        REGEXP_TYPE_PARAMETER_TIP
+                    ) as RegExpMatchArray;
+
                     if (typeParameterTip) {
                         params.push({ kind: "unknown", name: typeParameterTip[1] });
                     }
@@ -243,12 +428,25 @@ export class Document {
             }
 
             if (this.context._returns) {
-                const inlineParameters = firstTip.value.match(REGEXP_ADDITIONAL_PARENS);
+                /**
+                 * Using a regular expression to find the first set of parentheses in the first tip.
+                 *
+                 * @constant
+                 * @name inlineParameters
+                 * @kind variable
+                 * @memberof Document.parse
+                 * @type {RegExpMatchArray}
+                 */
+                const inlineParameters: RegExpMatchArray = firstTip.value.match(
+                    REGEXP_ADDITIONAL_PARENS
+                ) as RegExpMatchArray;
+
                 if (inlineParameters) {
                     let temp = "";
                     let sequence = 0;
                     let newParam = true;
                     const letters = inlineParameters[1].split("");
+
                     this.context._param = letters.reduce((params, letter, index) => {
                         if (letter.match(REGEXP_SEQUENCE_LETTERS_OPEN)) {
                             sequence++;
@@ -296,19 +494,68 @@ export class Document {
             }
         }
 
-        const startWithExport = this.code.match(REGEXP_EXPORT_LINE);
+        /**
+         * Checking if the code starts with an export statement.
+         *
+         * @constant
+         * @name startWithExport
+         * @kind variable
+         * @memberof Document.parse
+         * @type {RegExpMatchArray}
+         */
+        const startWithExport: RegExpMatchArray = this.code.match(REGEXP_EXPORT_LINE) as RegExpMatchArray;
+
         if (startWithExport) {
             this.context._exports = true;
         }
     }
 
+    /**
+     * Creating a new instance of the DocumentReturnTypes class.
+     *
+     * @method
+     * @name build
+     * @kind method
+     * @memberof Document
+     * @returns {DocumentReturnTypes}
+     */
     build(): DocumentReturnTypes {
+        /**
+         * Declaring a variable called snippets and assigning it an empty array.
+         *
+         * @let
+         * @name snippets
+         * @kind variable
+         * @memberof Document.build
+         * @type {string[]}
+         */
         let snippets: string[] = [];
+
+        /**
+         * Declaring a variable called tags and assigning it an empty array.
+         *
+         * @let
+         * @name tags
+         * @kind variable
+         * @memberof Document.build
+         * @type {string[]}
+         */
         let tags: string[] = [];
-        snippets.push(`${this.whitespace}/**`);
+
         for (const [name, builder] of Object.entries(this.builders) as DocumentBuilderEntrieTypes[]) {
             if (this.context[name] && getConfig(name) !== "Off") {
-                for (const line of builder(this.context[name] as DocumentBuilderInputTypes)) {
+                /**
+                 * Using the builder function to create a new document.
+                 *
+                 * @constant
+                 * @name builderOutput
+                 * @kind variable
+                 * @memberof Document.build
+                 * @type {string[]}
+                 */
+                const builderOutput: string[] = builder(this.context[name] as DocumentBuilderInputTypes);
+
+                for (const line of builderOutput) {
                     snippets.push(`\n${this.whitespace} * ${line}`);
                     if (line.match(REGEXP_FIRST_ATSIGN)) {
                         tags.push(line);
@@ -316,6 +563,8 @@ export class Document {
                 }
             }
         }
+
+        snippets.unshift(`${this.whitespace}/**`);
         snippets.push(`\n${this.whitespace} */\n`);
 
         return {

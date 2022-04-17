@@ -2,7 +2,15 @@ import * as assert from "assert";
 import { executeCommand, runtimeAwait, updateConfig } from "../../lib/Utils";
 import { openWorkspaceFile, readComments } from "./SpecUtils";
 
-const specs = [
+/**
+ * Defining a constant variable called `specs` and assigning it an array of objects.
+ *
+ * @constant
+ * @name specs
+ * @kind variable
+ * @type {{ file: string; targets: { code: string; start: number; end: number; }[]; }[]}
+ */
+const specs: { file: string; targets: { code: string; start: number; end: number }[] }[] = [
     {
         file: "type.spec.ts",
         targets: [
@@ -176,17 +184,80 @@ const specs = [
 ];
 
 for (const { file, targets } of specs) {
+    /**
+     * A Mocha function that creates a suite of tests.
+     *
+     * @async
+     * @var
+     * @name suite
+     * @type {Mocha.SuiteFunction (title: string, fn: (this: Mocha.Suite) => void) => Mocha.Suite (+1 overload)}
+     */
     suite(file, async () => {
+        /**
+         * A Mocha function that creates a suite of tests.
+         *
+         * @var
+         * @name suiteSetup
+         * @type {Mocha.HookFunction (fn: Mocha.Func) => void (+3 overloads)}
+         */
         suiteSetup(async () => {
+            /**
+             * Opening the file in the workspace.
+             *
+             */
             await openWorkspaceFile(file);
+
+            /**
+             * Updating the configuration of the extension.
+             *
+             */
             await updateConfig("description", "Manual");
+
+            /**
+             * Waiting for the extension to finish its work.
+             *
+             */
             await runtimeAwait(1000);
         });
 
         for (const { code, start, end } of targets) {
+            /**
+             * A Mocha function that creates a test case.
+             *
+             * @async
+             * @var
+             * @name test
+             * @type {Mocha.TestFunction (title: string, fn?: Mocha.Func) => Mocha.Test (+3 overloads)}
+             */
             test(code, async () => {
-                const comments = readComments(start, end);
-                const documents = await executeCommand("doctypes.custom.line", end, false);
+                /**
+                 * Reading the comments from the file.
+                 *
+                 * @constant
+                 * @name comments
+                 * @kind variable
+                 * @memberof suite() callback.test() callback
+                 * @type {string[]}
+                 */
+                const comments: string[] = readComments(start, end);
+
+                /**
+                 * Executing the `doctypes.custom.line` command and passing the `end` variable as the second argument.
+                 *
+                 * @constant
+                 * @name documents
+                 * @kind variable
+                 * @memberof suite() callback.test() callback
+                 * @type {string[]}
+                 */
+                const documents: string[] = (await executeCommand("doctypes.custom.line", end, false)) as string[];
+
+                /**
+                 * Comparing the `comments` and `documents` variables.
+                 *
+                 * @function
+                 * @name assert
+                 */
                 assert.deepStrictEqual(comments, documents);
             });
         }
