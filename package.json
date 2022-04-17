@@ -6,6 +6,7 @@
     "publisher": "dalirnet",
     "author": "Amir Reza Dalir <dalirnet@gmail.com>",
     "license": "MIT",
+    "icon": "icon.png",
     "engines": {
         "vscode": "^1.66.0"
     },
@@ -329,12 +330,15 @@
         "axios": "^0.26.1"
     },
     "categories": [
-        "Programming Languages"
+        "Programming Languages",
+        "Formatters",
+        "Other"
     ],
     "keywords": [
         "javascript",
         "typescript",
         "documentation",
-        "jsdoc"
+        "jsdoc",
+        "ai"
     ]
 }
