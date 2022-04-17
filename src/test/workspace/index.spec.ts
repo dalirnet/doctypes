@@ -3,7 +3,7 @@ import { createUserId } from "./function.spec";
 import { Id } from "./type.spec";
 
 /**
- * Description
+ * Creating a constant variable called `userId` of type `Id` and assigning it the value of `createUserId()`.
  *
  * @constant
  * @name userId
@@ -13,7 +13,7 @@ import { Id } from "./type.spec";
 const userId: Id = createUserId();
 
 /**
- * Description
+ * Creating a constant variable called `john` of type `User` and assigning it the value of `new User(userId, "John")`.
  *
  * @constant
  * @name john
@@ -24,7 +24,7 @@ const userId: Id = createUserId();
 const john: User = new User(userId, "John");
 
 /**
- * Description
+ * Calling the `getAge()` method on the `john` instance.
  *
  * @constant
  * @name john

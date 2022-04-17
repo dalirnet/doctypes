@@ -1,7 +1,7 @@
 import { Id, Name } from "./type.spec";
 
 /**
- * Description
+ * Exporting the interface.
  *
  * @interface
  * @name PersonInterface
@@ -10,7 +10,7 @@ import { Id, Name } from "./type.spec";
  */
 export interface PersonInterface {
     /**
-     * Description
+     * A property of type `Id`
      *
      * @property
      * @name id
@@ -21,7 +21,7 @@ export interface PersonInterface {
     id: Id;
 
     /**
-     * Description
+     * A property with a type of `Name` and it is optional.
      *
      * @property
      * @name name

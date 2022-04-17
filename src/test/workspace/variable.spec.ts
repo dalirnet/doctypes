@@ -1,6 +1,6 @@
 /**
- * Description
- * 
+ * Exporting a constant named `MIN` with a type of `1111` and a value of `1111`.
+ *
  * @constant
  * @name MIN
  * @kind variable
@@ -10,8 +10,8 @@
 export const MIN: 1111 = 1111;
 
 /**
- * Description
- * 
+ * Exporting a constant named `MAX` with a type of `999` and a value of `999`.
+ *
  * @constant
  * @name MAX
  * @kind variable

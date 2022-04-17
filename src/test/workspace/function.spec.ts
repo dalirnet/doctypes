@@ -2,7 +2,7 @@ import { Id } from "./type.spec";
 import { MAX, MIN } from "./variable.spec";
 
 /**
- * Description
+ * Exporting a function called `createUserId` that takes a parameter called `nonce` that is a number and returns a value of type `Id`.
  *
  * @function
  * @name createUserId
@@ -13,7 +13,7 @@ import { MAX, MIN } from "./variable.spec";
  */
 export function createUserId(nonce: number = 0): Id {
     /**
-     * Description
+     * Generating a random number between the `MAX` and `MIN` variables.
      *
      * @constant
      * @name perfix

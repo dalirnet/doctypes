@@ -3,7 +3,7 @@ import { UserAbstract } from "./abstract.spec";
 import { PersonInterface } from "./interface.spec";
 
 /**
- * Description
+ * Exporting the class User, which extends the class UserAbstract and implements the interface PersonInterface.
  *
  * @class
  * @name User
@@ -14,7 +14,7 @@ import { PersonInterface } from "./interface.spec";
  */
 export class User extends UserAbstract implements PersonInterface {
     /**
-     * Description
+     * A property of the class User.
      *
      * @property
      * @name id
@@ -27,7 +27,7 @@ export class User extends UserAbstract implements PersonInterface {
     public readonly id: Id;
 
     /**
-     * Description
+     * A property with a getter and setter.
      *
      * @property
      * @name name
@@ -39,7 +39,7 @@ export class User extends UserAbstract implements PersonInterface {
     public name?: Name;
 
     /**
-     * Description
+     * A property with a getter and setter.
      *
      * @property
      * @name _age
@@ -51,7 +51,7 @@ export class User extends UserAbstract implements PersonInterface {
     protected _age?: Age;
 
     /**
-     * Description
+     * A constructor.
      *
      * @constructor
      * @name User
@@ -69,7 +69,7 @@ export class User extends UserAbstract implements PersonInterface {
     }
 
     /**
-     * Description
+     * A setter.
      *
      * @method
      * @name (set) nickname
@@ -81,7 +81,7 @@ export class User extends UserAbstract implements PersonInterface {
     }
 
     /**
-     * Description
+     * A getter.
      *
      * @method
      * @name getNickname
@@ -95,7 +95,7 @@ export class User extends UserAbstract implements PersonInterface {
     };
 
     /**
-     * Description
+     * A method with a return type of `this`.
      *
      * @method
      * @name setAge
@@ -112,7 +112,7 @@ export class User extends UserAbstract implements PersonInterface {
     }
 
     /**
-     * Description
+     * A method with a return type of `Age`.
      *
      * @method
      * @name getAge

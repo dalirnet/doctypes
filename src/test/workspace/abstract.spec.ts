@@ -1,7 +1,7 @@
 import { Age } from "./type.spec";
 
 /**
- * Description
+ * Exporting the class UserAbstract.
  *
  * @class
  * @abstract
@@ -11,7 +11,7 @@ import { Age } from "./type.spec";
  */
 export abstract class UserAbstract {
     /**
-     * Description
+     * A constructor.
      *
      * @constructor
      * @name UserAbstract
@@ -19,7 +19,7 @@ export abstract class UserAbstract {
     constructor() {}
 
     /**
-     * Description
+     * A method that returns an Age.
      *
      * @method
      * @name getAge
@@ -31,7 +31,7 @@ export abstract class UserAbstract {
     public abstract getAge(): Age;
 
     /**
-     * Description
+     * A method that takes an Age and returns this.
      *
      * @method
      * @name setAge
@@ -44,7 +44,7 @@ export abstract class UserAbstract {
     public abstract setAge(age: Age): this;
 
     /**
-     * Description
+     * A getter.
      *
      * @method
      * @name (get) isOld

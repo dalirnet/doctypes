@@ -1,5 +1,5 @@
 /**
- * Description
+ * It's a type alias.
  *
  * @typedef
  * @name Id
@@ -9,7 +9,7 @@
 export type Id = string | number;
 
 /**
- * Description
+ * It's a type alias.
  *
  * @typedef
  * @name Name
@@ -19,7 +19,7 @@ export type Id = string | number;
 export type Name = string;
 
 /**
- * Description
+ * It's a type alias.
  *
  * @typedef
  * @name Age
