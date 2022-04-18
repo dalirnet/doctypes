@@ -1,8 +1,9 @@
 {
     "name": "doctypes",
     "displayName": "DocTypes",
-    "markdownDescription": "JSDoc generator for JavaScript, TypeScript using AI.",
-    "version": "1.0.0",
+    "description": "JSDoc generator for JavaScript, TypeScript using AI.",
+    "markdownDescription": "**JSDoc** generator for _JavaScript_, _TypeScript_ using **AI**.",
+    "version": "1.0.1",
     "publisher": "dalirnet",
     "author": "Amir Reza Dalir <dalirnet@gmail.com>",
     "license": "MIT",

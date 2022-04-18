@@ -1,8 +1,10 @@
 # DocTypes
 
-JSDoc generator for JavaScript, TypeScript using AI.
+**JSDoc** generator for _JavaScript_, _TypeScript_ using **AI**.
 
 ![demo](./demo.gif)
+
+---
 
 ## Sample
 
@@ -83,13 +85,17 @@ export interface PersonInterface {}
 export type Id = string | number;
 ```
 
-### Shortcut keys
+---
+
+## Shortcut keys
 
 -   linux `ctrl+alt+d`
 -   windows `ctrl+alt+d`
 -   mac `cmd+alt+d`
 
-### Configuration
+---
+
+## Configuration
 
 | **Name**                                                                                                                                 | **Type**                                                                        |
 | :--------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------ |
@@ -119,12 +125,16 @@ export type Id = string | number;
 | **doctypes.implements**</br>Type of <small>`@implements`</small> tag generation.                                                         | Enum <small>_Auto_ , _Off_</small></br>Default <small>`Auto`</small>            |
 | **doctypes.exports**</br>Type of <small>`@exports`</small> tag generation.                                                               | Enum <small>_Auto_ , _Off_</small></br>Default <small>`Auto`</small>            |
 
-### Supported filetypes
+---
 
--   .conf
--   .cgf
+## Supported filetypes
 
-### Test
+-   .js
+-   .ts
+
+---
+
+## Test
 
 -   [type.spec.ts](./src/test/workspace/type.spec.ts)
     -   ✔ type Id `(967ms)`
