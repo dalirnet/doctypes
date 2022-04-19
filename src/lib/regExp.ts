@@ -223,7 +223,7 @@ export const REGEXP_STATIC_LINE: RegExp = /^((public|private|protected)\s+)?stat
  * @exports
  */
 export const REGEXP_FUNCTION_TIP: RegExp =
-    /(constructor|function|method|property|const|let|var)(?:\s+)([\w.]+)(?:\?)?(?:\s+)?(?::)?(?:\s+)?(?:\((.*)\)|function)(?:\s+)?(?:(?::|=>)(?:\s+)?(.*))?/i;
+    /(constructor|function|method|property|const|let|var)(?:\s+)([\w.]+)(?:<.*>)?(?:\?)?(?:\s+)?(?::)?(?:\s+)?(?:\((.*)\)|function)(?:\s+)?(?:(?::|=>)(?:\s+)?(.*))?/i;
 
 /**
  * A regular expression that matches a line that starts with `getter` or `setter` followed by one or more spaces

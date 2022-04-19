@@ -184,6 +184,11 @@ const specs: { file: string; targets: { code: string; start: number; end: number
                 start: 15,
                 end: 24,
             },
+            {
+                code: "function validateUserName<In extends string, Out = boolean>(username: In)",
+                start: 29,
+                end: 39,
+            },
         ],
     },
     {
