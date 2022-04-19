@@ -125,3 +125,32 @@ export class User extends UserAbstract implements PersonInterface {
         return this._age as Age;
     }
 }
+
+/**
+ * Extending the User class.
+ *
+ * @class
+ * @name Employee
+ * @kind class
+ * @extends User
+ */
+class Employee extends User {
+    /**
+     * A property of the class Employee.
+     *
+     * @property
+     * @name role
+     * @kind property
+     * @memberof Employee
+     * @readonly
+     * @type {string}
+     */
+    readonly role?: string;
+}
+
+/**
+ * Exporting the class Employee.
+ *
+ * @exports
+ */
+export default Employee;

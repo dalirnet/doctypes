@@ -194,7 +194,7 @@ export const REGEXP_PROTECTED_LINE: RegExp = /^protected\s/i;
  * @type {RegExp}
  * @exports
  */
-export const REGEXP_READONY_LINE: RegExp = /^(public|private|protected)\s+readonly\s+/i;
+export const REGEXP_READONY_LINE: RegExp = /^((public|private|protected)\s+)?readonly\s+/i;
 
 /**
  * Exporting a constant named `REGEXP_FUNCTION_TIP` that is a regular expression that matches a line

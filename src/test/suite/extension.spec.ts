@@ -129,6 +129,21 @@ const specs: { file: string; targets: { code: string; start: number; end: number
                 start: 114,
                 end: 124,
             },
+            {
+                code: "class Employee extends User",
+                start: 129,
+                end: 137,
+            },
+            {
+                code: "readonly role?: string",
+                start: 138,
+                end: 148,
+            },
+            {
+                code: "export default Employee",
+                start: 151,
+                end: 156,
+            },
         ],
     },
     {
