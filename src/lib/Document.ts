@@ -17,6 +17,7 @@ import {
     REGEXP_READONY_LINE,
     REGEXP_SEQUENCE_LETTERS_CLOSE,
     REGEXP_SEQUENCE_LETTERS_OPEN,
+    REGEXP_STATIC_LINE,
     REGEXP_TYPEDEF_LINE,
     REGEXP_TYPE_PARAMETER_TIP,
     REGEXP_VARIABLE_TIP,
@@ -98,6 +99,9 @@ export const documentBuilders: DocumentBuilderTypes = {
     },
     _readonly() {
         return ["@readonly"];
+    },
+    _static() {
+        return ["@static"];
     },
     _instance() {
         return ["@instance"];
@@ -402,6 +406,10 @@ export class Document {
 
             if (this.code.match(REGEXP_READONY_LINE)) {
                 this.context._readonly = true;
+            }
+
+            if (this.code.match(REGEXP_STATIC_LINE)) {
+                this.context._static = true;
             }
 
             if (this.context._interface || this.context._typedef) {

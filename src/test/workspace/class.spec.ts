@@ -146,6 +146,34 @@ class Employee extends User {
      * @type {string}
      */
     readonly role?: string;
+
+    /**
+     * A static property of the class Employee.
+     *
+     * @property
+     * @name department
+     * @kind property
+     * @memberof Employee
+     * @static
+     * @type {string}
+     */
+    static department: string = "marketing";
+
+    /**
+     * A static method.
+     *
+     * @method
+     * @name createEmployee
+     * @kind method
+     * @memberof Employee
+     * @public
+     * @static
+     * @param {Id} id
+     * @returns {Employee}
+     */
+    public static createEmployee(id: Id): Employee {
+        return new this(id);
+    }
 }
 
 /**

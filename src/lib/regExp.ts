@@ -197,6 +197,18 @@ export const REGEXP_PROTECTED_LINE: RegExp = /^protected\s/i;
 export const REGEXP_READONY_LINE: RegExp = /^((public|private|protected)\s+)?readonly\s+/i;
 
 /**
+ * A regular expression that matches a line that starts with `public` or `private` or `protected` followed by one or more spaces
+ * followed by `static` followed by one or more spaces.
+ *
+ * @constant
+ * @name REGEXP_STATIC_LINE
+ * @kind variable
+ * @type {RegExp}
+ * @exports
+ */
+export const REGEXP_STATIC_LINE: RegExp = /^((public|private|protected)\s+)?static\s+/i;
+
+/**
  * Exporting a constant named `REGEXP_FUNCTION_TIP` that is a regular expression that matches a line
  * that starts with `constructor` or `function` or `method` or `property` or `const` or `let` or `var`
  * followed by one or more spaces followed by one or more word characters followed by an optional `?`

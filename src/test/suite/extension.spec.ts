@@ -140,9 +140,19 @@ const specs: { file: string; targets: { code: string; start: number; end: number
                 end: 148,
             },
             {
+                code: "static department: string",
+                start: 150,
+                end: 160,
+            },
+            {
+                code: "public static createEmployee(id: Id)",
+                start: 162,
+                end: 174,
+            },
+            {
                 code: "export default Employee",
-                start: 151,
-                end: 156,
+                start: 179,
+                end: 184,
             },
         ],
     },

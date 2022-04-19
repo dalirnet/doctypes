@@ -112,6 +112,7 @@ export type DocumentTypes = {
     _private: boolean;
     _protected: boolean;
     _readonly: boolean;
+    _static: boolean;
     _instance: boolean;
     _type: string;
     _param: { kind?: string; name?: string; description?: string }[];
