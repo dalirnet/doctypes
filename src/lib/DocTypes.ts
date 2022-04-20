@@ -35,25 +35,27 @@ export class DocTypes {
     public readonly symbols: Record<number, EditorSymbolTypes[]> = {};
 
     /**
+     * Declaring a private variable called context and assigning it the value of the current text editor.
+     *
+     * @property
+     * @name context
+     * @kind property
+     * @memberof DocTypes
+     * @private
+     * @readonly
+     * @type {vscode.TextEditor}
+     */
+    private readonly context: vscode.TextEditor;
+
+    /**
      * A constructor.
      *
      * @constructor
      * @name DocTypes
      * @param {vscode.ExtensionContext} extensionContext
      */
-    constructor(public readonly extensionContext: vscode.ExtensionContext) {}
-
-    /**
-     * A getter.
-     *
-     * @method
-     * @name (get) context
-     * @kind property
-     * @memberof DocTypes
-     * @returns {vscode.TextEditor}
-     */
-    get context(): vscode.TextEditor {
-        return vscode.window.activeTextEditor as vscode.TextEditor;
+    constructor(public readonly extensionContext: vscode.ExtensionContext) {
+        this.context = vscode.window.activeTextEditor as vscode.TextEditor;
     }
 
     /**
@@ -419,9 +421,13 @@ export class DocTypes {
      * @kind method
      * @memberof DocTypes
      * @param {EditorDefinitionTypes} { position, code, whitespace }
+     *  @param {vscode.CancellationToken} progressCancellation
      * @returns {Promise<boolean>}
      */
-    async addDescription({ position, code, whitespace }: EditorDefinitionTypes): Promise<boolean> {
+    async addDescription(
+        { position, code, whitespace }: EditorDefinitionTypes,
+        progressCancellation: vscode.CancellationToken
+    ): Promise<boolean> {
         try {
             /**
              * Declaring a variable called context and assigning it an empty string.
@@ -448,7 +454,9 @@ export class DocTypes {
              * @instance
              * @type {string | false}
              */
-            const newDescription: string | false = await new Descriptor(context, code, this.languageId).write();
+            const newDescription: string | false = await new Descriptor(context, code, this.languageId).write(
+                progressCancellation
+            );
 
             if (newDescription) {
                 /**
@@ -532,60 +540,64 @@ export class DocTypes {
          * @name progressOptions
          * @kind variable
          * @memberof DocTypes.generate
-         * @type {{ title: string; location: vscode.ProgressLocation; }}
+         * @type {vscode.ProgressOptions}
          */
-        const progressOptions: { title: string; location: vscode.ProgressLocation } = {
+        const progressOptions: vscode.ProgressOptions = {
             title: "DocTypes is being describe",
             location: vscode.ProgressLocation.Notification,
+            cancellable: true,
         };
 
-        return await vscode.window.withProgress(progressOptions, async (progress): Promise<string[]> => {
-            /**
-             * Getting the definition of the line.
-             *
-             * @constant
-             * @name definition
-             * @kind variable
-             * @memberof DocTypes.generate.vscode.window.withProgress() callback
-             * @type {EditorDefinitionTypes}
-             */
-            const definition: EditorDefinitionTypes = await this.getDefinitions(line);
-
-            if (!definition.code.match(REGEXP_IGNORE_LINE)) {
+        return await vscode.window.withProgress(
+            progressOptions,
+            async (progress, cancellationToken): Promise<string[]> => {
                 /**
-                 * Creating a new document object and then calling the build method on it.
+                 * Getting the definition of the line.
                  *
                  * @constant
-                 * @name documents
+                 * @name definition
                  * @kind variable
                  * @memberof DocTypes.generate.vscode.window.withProgress() callback
-                 * @instance
-                 * @type {DocumentReturnTypes}
+                 * @type {EditorDefinitionTypes}
                  */
-                const documents: DocumentReturnTypes = new Document(definition).build();
+                const definition: EditorDefinitionTypes = await this.getDefinitions(line);
 
-                if (emmit && (await this.addDocument(documents.snippet, definition.position))) {
-                    if (getConfig("_description") === "Auto") {
-                        let attempt = 1;
-                        let percent = 0;
-                        const progressTimer = setInterval(() => {
-                            percent++;
-                            if (percent > 100) {
-                                attempt++;
-                                percent = 0;
-                            }
-                            progress.report({ message: `Attempt ${attempt} - ${percent}%` });
-                        }, 100);
-                        await this.addDescription(definition);
-                        clearInterval(progressTimer);
+                if (!definition.code.match(REGEXP_IGNORE_LINE)) {
+                    /**
+                     * Creating a new document object and then calling the build method on it.
+                     *
+                     * @constant
+                     * @name documents
+                     * @kind variable
+                     * @memberof DocTypes.generate.vscode.window.withProgress() callback
+                     * @instance
+                     * @type {DocumentReturnTypes}
+                     */
+                    const documents: DocumentReturnTypes = new Document(definition).build();
+
+                    if (emmit && (await this.addDocument(documents.snippet, definition.position))) {
+                        if (getConfig("_description") === "Auto") {
+                            let attempt = 1;
+                            let percent = 0;
+                            const progressTimer = setInterval(() => {
+                                percent++;
+                                if (percent > 100) {
+                                    attempt++;
+                                    percent = 0;
+                                }
+                                progress.report({ message: `Attempt ${attempt} - ${percent}%` });
+                            }, 100);
+                            await this.addDescription(definition, cancellationToken);
+                            clearInterval(progressTimer);
+                        }
                     }
+
+                    return documents.tags;
                 }
 
-                return documents.tags;
+                return [];
             }
-
-            return [];
-        });
+        );
     }
 
     /**

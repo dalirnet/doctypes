@@ -210,3 +210,21 @@ export type ConfigKeysTypes =
  * @exports
  */
 export type ConfigValuesTypes = "Full" | "Single" | "Auto" | "Manual" | "Off";
+
+/**
+ * A type definition.
+ * 
+ * @typedef
+ * @name DescriptorPayloadTypes
+ * @kind variable
+ * @exports
+ */
+export type DescriptorPayloadTypes = {
+    userId: ConfigValuesTypes;
+    languageId: string;
+    context: string;
+    code: string;
+    source: string;
+    docStyle: string;
+    commented: boolean;
+};

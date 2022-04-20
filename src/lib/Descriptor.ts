@@ -1,5 +1,6 @@
-import axios, { AxiosInstance } from "axios";
-import { ConfigValuesTypes } from "./Types";
+import * as vscode from "vscode";
+import axios, { AxiosInstance, CancelTokenSource } from "axios";
+import { DescriptorPayloadTypes } from "./Types";
 import { errorHandler, getConfig, runtimeAwait } from "./Utils";
 
 /**
@@ -25,6 +26,31 @@ export class Descriptor {
     private readonly mintlify: AxiosInstance;
 
     /**
+     * A property that is used to cancel the mintlify request.
+     *
+     * @property
+     * @name mintlifyCancellation
+     * @kind property
+     * @memberof Descriptor
+     * @private
+     * @readonly
+     * @type {CancelTokenSource}
+     */
+    private readonly mintlifyCancellation: CancelTokenSource;
+
+    /**
+     * Descriptor cancellation status.
+     *
+     * @property
+     * @name canceled
+     * @kind property
+     * @memberof Descriptor
+     * @private
+     * @type {boolean}
+     */
+    private canceled: boolean = false;
+
+    /**
      * Defining a public property called `retry` and assigning it an object literal.
      *
      * @property
@@ -34,15 +60,26 @@ export class Descriptor {
      * @public
      * @type {{ max: number; delay: number; }}
      */
-    public retry = {
+    public retry: { max: number; delay: number } = {
         max: 10,
         delay: 500,
     };
 
     constructor(private readonly context: string, private readonly code: string, private readonly languageId: string) {
+        /**
+         * Preparing axios cancellation.
+         */
+        this.mintlifyCancellation = axios.CancelToken.source();
+
+        /**
+         * Preparing axios instance.
+         */
         this.mintlify = axios.create({
+            cancelToken: this.mintlifyCancellation.token,
             baseURL: "https://api.mintlify.com/docs/",
-            headers: { referer: "https://www.docstring.ai/" },
+            headers: {
+                referer: "https://www.docstring.ai/",
+            },
         });
     }
 
@@ -53,26 +90,33 @@ export class Descriptor {
      * @name (get) mintlifyPayload
      * @kind property
      * @memberof Descriptor
-     * @returns {{ userId: ConfigValuesTypes; languageId: string; context: string; code: string; source: string; docStyle: string; commented: boolean; }}
+     * @returns {DescriptorPayloadTypes}
      */
-    get mintlifyPayload(): {
-        userId: ConfigValuesTypes;
-        languageId: string;
-        context: string;
-        code: string;
-        source: string;
-        docStyle: string;
-        commented: boolean;
-    } {
+    get mintlifyPayload(): DescriptorPayloadTypes {
         return {
             userId: getConfig("mintlifyUserId"),
             languageId: "auto",
+            docStyle: "Auto-detect",
             context: this.context,
             code: this.code,
-            source: "web",
-            docStyle: "Auto-detect",
             commented: false,
+            source: "web",
         };
+    }
+
+    /**
+     * A method that is called when the user cancels the operation.
+     *
+     * @method
+     * @name cancellation
+     * @kind method
+     * @memberof Descriptor
+     * @private
+     * @returns {void}
+     */
+    private cancellation(): void {
+        this.canceled = true;
+        this.mintlifyCancellation.cancel();
     }
 
     /**
@@ -85,7 +129,27 @@ export class Descriptor {
      * @memberof Descriptor
      * @returns {Promise<string | false>}
      */
-    async write(): Promise<string | false> {
+    async write(progressCancellation: vscode.CancellationToken): Promise<string | false> {
+        /**
+         * Listening for a cancellation event.
+         */
+        progressCancellation.onCancellationRequested(() => {
+            this.cancellation();
+        });
+
+        /**
+         * Listening for a cancellation event.
+         *
+         * @constant
+         * @name changeActiveTextEditorListener
+         * @kind variable
+         * @memberof Descriptor.write
+         * @type {vscode.Disposable}
+         */
+        const changeActiveTextEditorListener: vscode.Disposable = vscode.window.onDidChangeActiveTextEditor(() => {
+            this.cancellation();
+        });
+
         try {
             /**
              * Destructuring the data property from the response object.
@@ -112,17 +176,30 @@ export class Descriptor {
             for (let retry = 0; retry <= this.retry.max; retry++) {
                 workerState = await this.worker(data?.id ?? 0);
 
-                if (workerState !== true) {
+                if (this.canceled || workerState !== true) {
                     break;
                 }
             }
+
             if (workerState === true) {
                 workerState = false;
             }
 
+            /**
+             * Disposing the event listener.
+             */
+            changeActiveTextEditorListener.dispose();
+
             return workerState;
         } catch (error) {
-            errorHandler(error, "The Mintlify writer has an unknown error.");
+            if (!this.canceled) {
+                errorHandler(error, "The Mintlify writer has an unknown error.");
+            }
+
+            /**
+             * Disposing the event listener.
+             */
+            changeActiveTextEditorListener.dispose();
 
             return false;
         }
@@ -159,7 +236,9 @@ export class Descriptor {
 
             return true;
         } catch (error) {
-            errorHandler(error, "The Mintlify worker has an unknown error.");
+            if (!this.canceled) {
+                errorHandler(error, "The Mintlify worker has an unknown error.");
+            }
 
             return false;
         }
