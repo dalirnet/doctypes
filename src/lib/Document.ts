@@ -21,7 +21,7 @@ import {
     REGEXP_TYPEDEF_LINE,
     REGEXP_TYPE_PARAMETER_TIP,
     REGEXP_VARIABLE_TIP,
-} from "./Regexp";
+} from "./RegExp";
 import {
     DocumentBuilderEntrieTypes,
     DocumentBuilderInputTypes,

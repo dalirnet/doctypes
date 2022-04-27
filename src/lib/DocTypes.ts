@@ -10,7 +10,7 @@ import {
     REGEXP_MULTI_SPACES,
     REGEXP_PARENS_LINE,
     REGEXP_VALID_TIP,
-} from "./Regexp";
+} from "./RegExp";
 
 /**
  * Exporting the class DocTypes.

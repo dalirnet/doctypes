@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { inspect } from "util";
 import { ConfigKeysTypes, ConfigValuesTypes } from "./Types";
-import { REGEXP_FIRST_UNDERSCORES } from "./Regexp";
+import { REGEXP_FIRST_UNDERSCORES } from "./RegExp";
 
 /**
  * A function that returns a promise.

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { DocTypes } from "./lib/DocTypes";
-import { errorHandler, registerCommand } from "./lib/utils";
+import { errorHandler, registerCommand } from "./lib/Utils";
 
 /**
  * This is the entry point of the extension.

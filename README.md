@@ -137,39 +137,45 @@ export type Id = string | number;
 ## Test
 
 -   [type.spec.ts](./src/test/workspace/type.spec.ts)
-    -   ✔ type Id `(967ms)`
-    -   ✔ type Name `(150ms)`
-    -   ✔ type Age `(169ms)`
+    -   ✔ type Id
+    -   ✔ type Name
+    -   ✔ type Age
 -   [interface.spec.ts](./src/test/workspace/interface.spec.ts)
-    -   ✔ interface PersonInterface `(133ms)`
-    -   ✔ id: Id `(73ms)`
-    -   ✔ name?: Name `(74ms)`
+    -   ✔ interface PersonInterface
+    -   ✔ id: Id
+    -   ✔ name?: Name
 -   [abstract.spec.ts](./src/test/workspace/abstract.spec.ts)
-    -   ✔ abstract class UserAbstract `(175ms)`
-    -   ✔ constructor() `(44ms)`
-    -   ✔ abstract getAge() `(125ms)`
-    -   ✔ abstract setAge(age: Age) `(187ms)`
-    -   ✔ get isOld() `(91ms)`
+    -   ✔ abstract class UserAbstract
+    -   ✔ constructor()
+    -   ✔ abstract getAge()
+    -   ✔ abstract setAge(age: Age)
+    -   ✔ get isOld()
 -   [class.spec.ts](./src/test/workspace/class.spec.ts)
-    -   ✔ class User extends UserAbstract implements PersonInterface `(240ms)`
-    -   ✔ public readonly id: Id `(141ms)`
-    -   ✔ public name?: Name `(91ms)`
-    -   ✔ protected \_age?: Age `(67ms)`
-    -   ✔ constructor(id: Id, name?: Name) `(136ms)`
-    -   ✔ set nickname(name: Name) `(105ms)`
-    -   ✔ public getNickname: () `(143ms)`
-    -   ✔ public setAge(age: Age) `(204ms)`
-    -   ✔ public getAge() `(99ms)`
+    -   ✔ class User extends UserAbstract implements PersonInterface
+    -   ✔ public readonly id: Id
+    -   ✔ public name?: Name
+    -   ✔ protected \_age?: Age
+    -   ✔ constructor(id: Id, name?: Name)
+    -   ✔ set nickname(name: Name)
+    -   ✔ public getNickname: ()
+    -   ✔ public setAge(age: Age)
+    -   ✔ public getAge()
+    -   ✔ class Employee extends User
+    -   ✔ readonly role?: string
+    -   ✔ static department: string
+    -   ✔ public static createEmployee(id: Id) (54ms)
+    -   ✔ export default Employee
 -   [variable.spec.ts](./src/test/workspace/variable.spec.ts)
-    -   ✔ const MIN: 1111 `(160ms)`
-    -   ✔ const MAX: 999 `(137ms)`
+    -   ✔ const MIN: 1111
+    -   ✔ const MAX: 999
 -   [function.spec.ts](./src/test/workspace/function.spec.ts)
-    -   ✔ function createUserId(nonce: number = 0) `(224ms)`
-    -   ✔ const perfix: number `(317ms)`
+    -   ✔ function createUserId(nonce: number = 0)
+    -   ✔ const perfix: number
+    -   ✔ function validateUserName<In extends string, Out = boolean>(username: In)
 -   [index.spec.ts](./src/test/workspace/index.spec.ts)
-    -   ✔ const userId: Id `(143ms)`
-    -   ✔ const john: User `(217ms)`
-    -   ✔ john.getAge() `(78ms)`
+    -   ✔ const userId: Id
+    -   ✔ const john: User
+    -   ✔ john.getAge()
 
 ---
 
