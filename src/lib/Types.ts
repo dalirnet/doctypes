@@ -198,6 +198,7 @@ export type ConfigKeysTypes =
     | keyof {
           [P in keyof DocumentTypes as string & P extends `${"_"}${infer V}` ? V | P : P]: any;
       }
+    | "descriptionWrap"
     | "mintlifyUserId"
     | "mintlifyContext";
 
@@ -213,7 +214,7 @@ export type ConfigValuesTypes = "Full" | "Single" | "Auto" | "Manual" | "Off";
 
 /**
  * A type definition.
- * 
+ *
  * @typedef
  * @name DescriptorPayloadTypes
  * @kind variable

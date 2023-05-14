@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { Document } from "./Document";
 import { Descriptor } from "./Descriptor";
-import { errorHandler, executeCommand, getConfig } from "./Utils";
+import { errorHandler, executeCommand, getConfig, wrapLongDescription } from "./Utils";
 import { DocumentReturnTypes, EditorDefinitionTypes, EditorSymbolTypes, EditorWordTypes } from "./Types";
 import {
     REGEXP_ANY_WORDS,
@@ -471,12 +471,23 @@ export class DocTypes {
                 const currentDescription: string = this.context.document.lineAt(position.line + 1).text;
 
                 return await this.context.edit((builder: vscode.TextEditorEdit) => {
+                    /**
+                     * Init descriptions.
+                     *
+                     * @constant
+                     * @name descriptions
+                     * @kind variable
+                     * @memberof DocTypes.addDescription.context.edit() callback
+                     * @type {string[]}
+                     */
+                    const descriptions: string[] = wrapLongDescription(newDescription);
+
                     builder.replace(
                         new vscode.Range(
-                            new vscode.Position(position.line + 1, whitespace.length + 3),
+                            new vscode.Position(position.line + 1, 0),
                             new vscode.Position(position.line + 1, currentDescription.length)
                         ),
-                        newDescription
+                        descriptions.map((part) => whitespace + " * " + part).join("\n")
                     );
                 });
             }
@@ -543,7 +554,7 @@ export class DocTypes {
          * @type {vscode.ProgressOptions}
          */
         const progressOptions: vscode.ProgressOptions = {
-            title: "DocTypes is being describe",
+            title: `DocTypes is being describe for line ${line}`,
             location: vscode.ProgressLocation.Notification,
             cancellable: true,
         };
@@ -579,6 +590,7 @@ export class DocTypes {
                         if (getConfig("_description") === "Auto") {
                             let attempt = 1;
                             let percent = 0;
+
                             const progressTimer = setInterval(() => {
                                 percent++;
                                 if (percent > 100) {
@@ -587,7 +599,9 @@ export class DocTypes {
                                 }
                                 progress.report({ message: `Attempt ${attempt} - ${percent}%` });
                             }, 100);
+
                             await this.addDescription(definition, cancellationToken);
+
                             clearInterval(progressTimer);
                         }
                     }

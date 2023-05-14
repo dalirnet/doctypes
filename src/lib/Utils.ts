@@ -34,6 +34,37 @@ export const debug = (input: any): void => {
 };
 
 /**
+ * The function splits the input string into words.
+ *
+ * @function
+ * @name wrapLongDescription
+ * @kind variable
+ * @param {string} description
+ * @returns {string[]}
+ * @exports
+ */
+export const wrapLongDescription = (description: string): string[] => {
+    const descriptionWrap = Math.min(Math.max(parseInt(getConfig("descriptionWrap")), 16), 1024);
+
+    const words: string[] = description.split(/\s+/g);
+    const lines: string[] = [];
+
+    for (const word of words) {
+        if (!lines.length) {
+            lines.push(word);
+        } else {
+            if (lines[lines.length - 1].length + word.length < descriptionWrap) {
+                lines[lines.length - 1] += " " + word;
+            } else {
+                lines.push(word);
+            }
+        }
+    }
+
+    return lines;
+};
+
+/**
  * A function that takes an object, a string, and a function as parameters.
  *
  * @function
@@ -93,6 +124,17 @@ export const getConfig = (key: ConfigKeysTypes): ConfigValuesTypes => {
     return vscode.workspace.getConfiguration().get(configKey) as ConfigValuesTypes;
 };
 
+/**
+ * A function that update workspace config.
+ *
+ * @function
+ * @name updateConfig
+ * @kind variable
+ * @param {ConfigKeysTypes} key
+ * @param {ConfigValuesTypes} value
+ * @returns {Thenable<void>}
+ * @exports
+ */
 export const updateConfig = (key: ConfigKeysTypes, value: ConfigValuesTypes): Thenable<void> => {
     /**
      * Replacing the first underscore in the key with an empty string.

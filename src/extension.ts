@@ -53,23 +53,25 @@ export const activate = (extensionContext: vscode.ExtensionContext): void => {
 
                             return isNaN(line) || line <= 0 ? "Invalid value." : null;
                         },
-                    })) ?? "1"
+                    })) ?? "-1"
                 );
             }
 
-            /**
-             * Calling the `generateForCustomLine` method from the `DocTypes` class.
-             *
-             * @constant
-             * @name documents
-             * @kind variable
-             * @memberof activate.registerCommand("custom.line") callback
-             * @instance
-             * @type {string[]}
-             */
-            const documents: string[] = await new DocTypes(extensionContext).generateForCustomLine(line, emmit);
+            if (line >= 0) {
+                /**
+                 * Calling the `generateForCustomLine` method from the `DocTypes` class.
+                 *
+                 * @constant
+                 * @name documents
+                 * @kind variable
+                 * @memberof activate.registerCommand("custom.line") callback
+                 * @instance
+                 * @type {string[]}
+                 */
+                const documents: string[] = await new DocTypes(extensionContext).generateForCustomLine(line, emmit);
 
-            return documents;
+                return documents;
+            }
         });
 
         /**

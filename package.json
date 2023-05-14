@@ -3,13 +3,13 @@
     "displayName": "DocTypes",
     "description": "JSDoc generator for JavaScript, TypeScript using AI.",
     "markdownDescription": "**JSDoc** generator for _JavaScript_, _TypeScript_ using **AI**.",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "publisher": "dalirnet",
     "author": "Amir Reza Dalir <dalirnet@gmail.com>",
     "license": "MIT",
     "icon": "icon.png",
     "engines": {
-        "vscode": "^1.66.0"
+        "vscode": "^1.75.0"
     },
     "scripts": {
         "vscode:prepublish": "yarn run compile",
@@ -21,9 +21,7 @@
     "activationEvents": [
         "onStartupFinished",
         "onLanguage:javascript",
-        "onLanguage:typescript",
-        "onCommand:doctypes.custom.line",
-        "onCommand:doctypes.current.line"
+        "onLanguage:typescript"
     ],
     "main": "dist/extension.js",
     "contributes": {
@@ -52,8 +50,8 @@
             {
                 "when": "editorTextFocus || editorLangId == javascript || editorLangId == typescript",
                 "command": "doctypes.current.line",
-                "key": "ctrl+alt+d",
-                "mac": "cmd+alt+d"
+                "key": "shift+ctrl+/",
+                "mac": "shift+cmd+/"
             }
         ],
         "configuration": {
@@ -85,6 +83,12 @@
                     ],
                     "default": "Auto",
                     "markdownDescription": "Type of `description` generation."
+                },
+                "doctypes.descriptionWrap": {
+                    "order": 0.1,
+                    "type": "number",
+                    "default": 120,
+                    "markdownDescription": "When the `description` generation type is set to `Auto`, the description will be split into lines based on this value."
                 },
                 "doctypes.class": {
                     "order": 1,
