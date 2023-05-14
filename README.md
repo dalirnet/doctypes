@@ -89,9 +89,9 @@ export type Id = string | number;
 
 ## Shortcut keys
 
--   linux `ctrl+alt+d`
--   windows `ctrl+alt+d`
--   mac `cmd+alt+d`
+-   linux `shift+ctrl+/`
+-   windows `shift+ctrl+/`
+-   mac `shift+cmd+/`
 
 ---
 
