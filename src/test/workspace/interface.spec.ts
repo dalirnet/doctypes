@@ -27,7 +27,7 @@ export interface PersonInterface {
      * @name name
      * @kind property
      * @memberof PersonInterface
-     * @type {string}
+     * @type {string | undefined}
      */
     name?: Name;
 }

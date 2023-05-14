@@ -34,7 +34,7 @@ export class User extends UserAbstract implements PersonInterface {
      * @kind property
      * @memberof User
      * @public
-     * @type {string}
+     * @type {string | undefined}
      */
     public name?: Name;
 
@@ -46,7 +46,7 @@ export class User extends UserAbstract implements PersonInterface {
      * @kind property
      * @memberof User
      * @protected
-     * @type {number}
+     * @type {number | undefined}
      */
     protected _age?: Age;
 
@@ -143,7 +143,7 @@ class Employee extends User {
      * @kind property
      * @memberof Employee
      * @readonly
-     * @type {string}
+     * @type {string | undefined}
      */
     readonly role?: string;
 
